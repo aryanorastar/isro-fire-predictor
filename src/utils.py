@@ -278,7 +278,10 @@ def validate_input_data(data: Dict) -> bool:
 
 
 def setup_logging(config=None):
-    """Disabled for Streamlit Cloud"""
+    """Debug version to find where this is called from"""
+    import traceback
+    print("setup_logging called from:")
+    traceback.print_stack()
     pass
 
 def _is_streamlit_cloud():
