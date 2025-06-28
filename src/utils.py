@@ -278,19 +278,8 @@ def validate_input_data(data: Dict) -> bool:
 
 
 def setup_logging(config=None):
-    """Setup logging configuration - Streamlit Cloud compatible."""
-    import logging
-    import sys
-    
-    # Configure basic logging to console only
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        stream=sys.stdout,
-        force=True
-    )
-    
-    return logging.getLogger()
+    """Disabled for Streamlit Cloud"""
+    pass
 
 def _is_streamlit_cloud():
     """Detect if running on Streamlit Cloud."""

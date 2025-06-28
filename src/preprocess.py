@@ -30,13 +30,9 @@ class DataPreprocessor:
     
     def __init__(self, config_path: str = "config.yaml"):
         self.config = load_config(config_path)
-        try:
-            setup_logging(self.config)
-        except Exception as e:
-            # Fallback: basic logging for Streamlit Cloud
-            import logging
-            logging.basicConfig(level=logging.INFO)
-            print(f"Logging setup failed: {e}, using basic logging")
+        # setup_logging(self.config)  # Completely disabled for Streamlit Cloud
+        import logging
+        logging.basicConfig(level=logging.INFO)
         self.data_dir = self.config["paths"]["data_dir"]
         self.input_size = tuple(self.config["data"]["input_size"])
         
