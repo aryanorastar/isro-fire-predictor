@@ -6,14 +6,13 @@ import streamlit as st
 import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 from src.infer import FirePredictor
 from src.utils import load_config
 
-# Custom CSS for dark fire theme, glassmorphism, and advanced animations
+# Enhanced CSS with micro-animations and advanced effects
 st.markdown("""
 <style>
 /* Dark Fire Theme with Advanced Animations */
@@ -32,7 +31,7 @@ st.markdown("""
     100% { background-position: 0% 50%; }
 }
 
-/* Floating ember particles with enhanced physics */
+/* Enhanced floating ember particles */
 .ember {
     position: fixed;
     width: 4px;
@@ -52,7 +51,7 @@ st.markdown("""
     100% { transform: translateY(-100px) rotate(360deg) scale(0.5); opacity: 0; }
 }
 
-/* Glassmorphism containers with enhanced effects */
+/* Glassmorphism containers with enhanced hover effects */
 .glass-container {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
@@ -88,7 +87,7 @@ st.markdown("""
     100% { left: 100%; }
 }
 
-/* Glowing borders with enhanced pulse */
+/* Enhanced glowing borders */
 .glow-border {
     border: 2px solid transparent;
     background: linear-gradient(45deg, #ff6b35, #ff4500, #ff6b35);
@@ -124,7 +123,7 @@ st.markdown("""
     50% { background-position: 100% 50%; opacity: 0.7; }
 }
 
-/* Enhanced button animations */
+/* Enhanced button animations with lift and glow */
 .stButton > button {
     background: linear-gradient(45deg, #ff6b35, #ff4500);
     border: none;
@@ -198,7 +197,7 @@ st.markdown("""
     transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
 }
 
-/* Custom title styling with enhanced effects */
+/* Enhanced title with fire effects */
 .fire-title {
     font-family: 'Orbitron', monospace;
     font-weight: 900;
@@ -237,121 +236,6 @@ st.markdown("""
     50% { width: 80%; }
 }
 
-/* Sidebar styling with enhanced effects */
-.sidebar .sidebar-content {
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(255, 107, 53, 0.3);
-}
-
-/* Enhanced form styling */
-.stSelectbox > div > div {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    border-radius: 10px;
-    color: white;
-    transition: all 0.3s ease;
-}
-
-.stSelectbox > div > div:hover {
-    border-color: rgba(255, 107, 53, 0.6);
-    box-shadow: 0 0 15px rgba(255, 107, 53, 0.2);
-}
-
-.stDateInput > div > div {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    border-radius: 10px;
-    color: white;
-    transition: all 0.3s ease;
-}
-
-.stDateInput > div > div:hover {
-    border-color: rgba(255, 107, 53, 0.6);
-    box-shadow: 0 0 15px rgba(255, 107, 53, 0.2);
-}
-
-/* Text styling with enhanced readability */
-.stMarkdown {
-    color: #f0f0f0;
-    line-height: 1.6;
-}
-
-/* JSON display styling with enhanced effects */
-.json-container {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 107, 53, 0.2);
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px 0;
-    transition: all 0.3s ease;
-}
-
-.json-container:hover {
-    border-color: rgba(255, 107, 53, 0.4);
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
-}
-
-/* Enhanced alert styling */
-.stAlert {
-    background: rgba(255, 107, 53, 0.1);
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    border-radius: 15px;
-    color: #ffd700;
-    transition: all 0.3s ease;
-}
-
-.stAlert:hover {
-    background: rgba(255, 107, 53, 0.15);
-    border-color: rgba(255, 107, 53, 0.5);
-}
-
-/* Error box styling */
-.stAlert[data-baseweb="notification"] {
-    background: rgba(255, 69, 0, 0.1);
-    border: 1px solid rgba(255, 69, 0, 0.3);
-    color: #ff6b6b;
-}
-
-/* Success box styling */
-.stAlert[data-baseweb="toast"] {
-    background: rgba(0, 255, 127, 0.1);
-    border: 1px solid rgba(0, 255, 127, 0.3);
-    color: #00ff7f;
-}
-
-/* Hide Streamlit default elements */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-
-/* Custom ember particles with varied timing */
-.ember-1 { left: 10%; animation-delay: 0s; }
-.ember-2 { left: 20%; animation-delay: 1s; }
-.ember-3 { left: 30%; animation-delay: 2s; }
-.ember-4 { left: 40%; animation-delay: 3s; }
-.ember-5 { left: 50%; animation-delay: 4s; }
-.ember-6 { left: 60%; animation-delay: 5s; }
-.ember-7 { left: 70%; animation-delay: 6s; }
-.ember-8 { left: 80%; animation-delay: 7s; }
-.ember-9 { left: 90%; animation-delay: 8s; }
-
-/* 3D terrain container */
-.terrain-container {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-}
-
-/* Weather icon animations */
-.weather-icon {
-    animation: weatherFloat 4s ease-in-out infinite;
-}
-
-@keyframes weatherFloat {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(5deg); }
-}
-
 /* Wind particle effects */
 .wind-particle {
     position: absolute;
@@ -368,6 +252,32 @@ header {visibility: hidden;}
     90% { opacity: 1; }
     100% { transform: translateX(100px) translateY(-20px); opacity: 0; }
 }
+
+/* Weather icon animations */
+.weather-icon {
+    animation: weatherFloat 4s ease-in-out infinite;
+}
+
+@keyframes weatherFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Hide Streamlit defaults */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* Custom ember particles */
+.ember-1 { left: 10%; animation-delay: 0s; }
+.ember-2 { left: 20%; animation-delay: 1s; }
+.ember-3 { left: 30%; animation-delay: 2s; }
+.ember-4 { left: 40%; animation-delay: 3s; }
+.ember-5 { left: 50%; animation-delay: 4s; }
+.ember-6 { left: 60%; animation-delay: 5s; }
+.ember-7 { left: 70%; animation-delay: 6s; }
+.ember-8 { left: 80%; animation-delay: 7s; }
+.ember-9 { left: 90%; animation-delay: 8s; }
 
 </style>
 
@@ -406,7 +316,7 @@ st.markdown('<h1 class="fire-title">🔥 FOREST FIRE AI PREDICTOR 🔥</h1>', un
 config = load_config()
 predictor = FirePredictor()
 
-# Glassmorphism sidebar with enhanced interactions
+# Enhanced sidebar with micro-animations
 with st.sidebar:
     st.markdown('<div class="glass-container glow-border morph-transition">', unsafe_allow_html=True)
     st.markdown("### 🎛️ Prediction Controls")
@@ -441,14 +351,14 @@ with st.sidebar:
         )
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Main content area with enhanced visualizations
+# Main content area with advanced visualizations
 if predict_button:
     with st.spinner("🔥 Running AI prediction..."):
         try:
             result = predictor.predict(region=region, date=str(date), time_window=f"{time_window}h")
             pred = np.array(result['prediction'])
             
-            # Create animated fire spread simulation
+            # Animated Fire Spread Simulation
             st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 🔥 Animated Fire Spread Simulation")
             
@@ -527,68 +437,98 @@ if predict_button:
             st.markdown('</div>', unsafe_allow_html=True)
             
             # 3D Terrain Visualization
-            st.markdown('<div class="glass-container terrain-container morph-transition">', unsafe_allow_html=True)
+            st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 🏔️ 3D Terrain & Fire Movement")
             
-            # Generate 3D terrain data
-            x = np.linspace(0, 100, 50)
-            y = np.linspace(0, 100, 50)
-            X, Y = np.meshgrid(x, y)
-            
-            # Create realistic terrain with elevation
-            Z = 50 * np.sin(X/20) * np.cos(Y/20) + 30 * np.exp(-((X-50)**2 + (Y-50)**2)/1000)
-            
-            # Add fire overlay
-            fire_overlay = pred * 100  # Scale fire intensity
-            
-            # Create 3D surface plot
-            fig_3d = go.Figure()
-            
-            # Terrain surface
-            fig_3d.add_trace(go.Surface(
-                x=X, y=Y, z=Z,
-                colorscale='Earth',
-                opacity=0.8,
-                name='Terrain',
-                showscale=False
-            ))
-            
-            # Fire overlay
-            fig_3d.add_trace(go.Surface(
-                x=X, y=Y, z=Z + fire_overlay,
-                colorscale='Hot',
-                opacity=0.6,
-                name='Fire Spread',
-                showscale=True
-            ))
-            
-            fig_3d.update_layout(
-                title=f'🏔️ 3D Terrain & Fire Spread - {region.title()}',
-                title_font_size=18,
-                title_font_color='#ff6b35',
-                scene=dict(
-                    xaxis_title='Longitude',
-                    yaxis_title='Latitude',
-                    zaxis_title='Elevation (m)',
-                    camera=dict(
-                        eye=dict(x=1.5, y=1.5, z=1.5)
+            try:
+                # Generate 3D terrain data with matching dimensions
+                pred_shape = pred.shape
+                x = np.linspace(0, 100, pred_shape[1])
+                y = np.linspace(0, 100, pred_shape[0])
+                X, Y = np.meshgrid(x, y)
+                
+                # Create realistic terrain with elevation
+                Z = 50 * np.sin(X/20) * np.cos(Y/20) + 30 * np.exp(-((X-50)**2 + (Y-50)**2)/1000)
+                
+                # Add fire overlay with matching dimensions
+                fire_overlay = pred * 100  # Scale fire intensity
+                
+                # Create 3D surface plot
+                fig_3d = go.Figure()
+                
+                # Terrain surface
+                fig_3d.add_trace(go.Surface(
+                    x=X, y=Y, z=Z,
+                    colorscale='Earth',
+                    opacity=0.8,
+                    name='Terrain',
+                    showscale=False
+                ))
+                
+                # Fire overlay
+                fig_3d.add_trace(go.Surface(
+                    x=X, y=Y, z=Z + fire_overlay,
+                    colorscale='Hot',
+                    opacity=0.6,
+                    name='Fire Spread',
+                    showscale=True
+                ))
+                
+                fig_3d.update_layout(
+                    title=f'🏔️ 3D Terrain & Fire Spread - {region.title()}',
+                    title_font_size=18,
+                    title_font_color='#ff6b35',
+                    scene=dict(
+                        xaxis_title='Longitude',
+                        yaxis_title='Latitude',
+                        zaxis_title='Elevation (m)',
+                        camera=dict(
+                            eye=dict(x=1.5, y=1.5, z=1.5)
+                        ),
+                        bgcolor='rgba(0,0,0,0)'
                     ),
-                    bgcolor='rgba(0,0,0,0)'
-                ),
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(color='#f0f0f0'),
-                height=600
-            )
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#f0f0f0'),
+                    height=600
+                )
+                
+                st.plotly_chart(fig_3d, use_container_width=True)
+                
+            except Exception as e:
+                st.warning(f"⚠️ 3D terrain visualization could not be rendered: {str(e)}")
+                st.info("Displaying 2D fire spread visualization instead.")
+                
+                # Fallback to 2D visualization
+                fig_2d = go.Figure()
+                fig_2d.add_trace(go.Heatmap(
+                    z=pred,
+                    colorscale='Hot',
+                    showscale=True,
+                    name='Fire Intensity'
+                ))
+                
+                fig_2d.update_layout(
+                    title=f'🔥 Fire Spread - {region.title()}',
+                    title_font_size=18,
+                    title_font_color='#ff6b35',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#f0f0f0'),
+                    xaxis=dict(title='Longitude', gridcolor='rgba(255,107,53,0.2)'),
+                    yaxis=dict(title='Latitude', gridcolor='rgba(255,107,53,0.2)'),
+                    height=400
+                )
+                
+                st.plotly_chart(fig_2d, use_container_width=True)
             
-            st.plotly_chart(fig_3d, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
             # Real-time Weather & Wind Analysis
             st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 🌪️ Real-time Weather & Wind Analysis")
             
-            # Create weather dashboard
+            # Create weather dashboard with pulse animations
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
@@ -666,15 +606,13 @@ if predict_button:
             st.plotly_chart(fig_wind, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
-            # Metadata in enhanced glassmorphism container
+            # Enhanced metadata display
             st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 📊 Live Input Conditions")
-            st.markdown('<div class="json-container">', unsafe_allow_html=True)
             st.json(result['metadata'])
             st.markdown('</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
             
-            # Download section with enhanced styling
+            # Download section
             st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 💾 Download Results")
             st.download_button(
@@ -685,7 +623,7 @@ if predict_button:
             )
             st.markdown('</div>', unsafe_allow_html=True)
             
-            # Region information with enhanced layout
+            # Region information
             st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
             st.markdown("### 🗺️ Region Information")
             region_info = config['regions'][region]
@@ -700,7 +638,7 @@ if predict_button:
             st.error(f"❌ Error during prediction: {str(e)}")
             st.info("ℹ️ This is a demo with synthetic data. In production, this would use real satellite and weather data.")
 else:
-    # Welcome section with enhanced glassmorphism
+    # Welcome section with enhanced animations
     st.markdown('<div class="glass-container morph-transition">', unsafe_allow_html=True)
     st.markdown("### 🎯 Welcome to Forest Fire AI Predictor")
     st.info("🔥 Select parameters and click 'Predict Fire Spread' to begin AI-powered fire prediction analysis.")
