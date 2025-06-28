@@ -19,7 +19,7 @@ import json
 
 from src.utils import (
     load_config, normalize_data, calculate_ndvi, calculate_slope,
-    resize_raster, get_weather_data, setup_logging
+    resize_raster, get_weather_data
 )
 
 logger = logging.getLogger(__name__)
