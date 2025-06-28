@@ -1,0 +1,97 @@
+# Forest Fire Spread Prediction Configuration
+
+# Model Configuration
+model:
+  architecture: "transformer_ca"  # Options: transformer_ca, oms_cnn_pso
+  input_channels: 8  # Satellite bands + weather + terrain
+  hidden_dim: 256
+  num_layers: 6
+  num_heads: 8
+  dropout: 0.1
+  ca_iterations: 10  # Cellular automata iterations
+  
+# Training Configuration
+training:
+  batch_size: 16
+  learning_rate: 0.001
+  epochs: 100
+  early_stopping_patience: 10
+  validation_split: 0.2
+  loss_function: "focal_loss"  # Options: focal_loss, dice_loss, bce_loss
+  optimizer: "adamw"
+  scheduler: "cosine_annealing"
+  
+# Data Configuration
+data:
+  satellite_sources:
+    - "sentinel2"
+    - "liss4"
+    - "insat3dr"
+  weather_sources:
+    - "openweathermap"
+    - "era5"
+  terrain_features:
+    - "elevation"
+    - "slope"
+    - "ndvi"
+    - "aspect"
+  input_size: [256, 256]
+  time_steps: 24  # Hours to predict
+  
+# Regions Configuration
+regions:
+  uttarakhand:
+    bounds: [28.4, 77.0, 31.5, 81.0]
+    center: [30.0668, 79.0193]
+  himachal_pradesh:
+    bounds: [30.0, 75.0, 33.5, 78.0]
+    center: [31.8173, 77.1031]
+  karnataka:
+    bounds: [11.5, 74.0, 18.5, 78.5]
+    center: [15.3173, 75.7139]
+    
+# API Configuration
+api:
+  openweathermap_key: "${OPENWEATHERMAP_API_KEY}"
+  sentinel_hub_key: "${SENTINEL_HUB_API_KEY}"
+  earth_engine_key: "${EARTH_ENGINE_API_KEY}"
+  
+# File Paths
+paths:
+  data_dir: "data/"
+  models_dir: "models/"
+  logs_dir: "logs/"
+  results_dir: "results/"
+  
+# Preprocessing Configuration
+preprocessing:
+  normalize_satellite: true
+  normalize_weather: true
+  augment_data: true
+  random_rotation: 15
+  random_flip: true
+  
+# Evaluation Configuration
+evaluation:
+  metrics: ["iou", "f1_score", "precision", "recall"]
+  test_regions: ["uttarakhand", "himachal_pradesh"]
+  prediction_horizons: [6, 12, 24]  # Hours
+  
+# Web Dashboard Configuration
+dashboard:
+  port: 8501
+  host: "0.0.0.0"
+  debug: false
+  map_style: "openstreetmap"  # Options: openstreetmap, satellite, terrain
+  
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/forestfire.log"
+  
+# Hardware Configuration
+hardware:
+  device: "auto"  # Options: auto, cpu, cuda
+  num_workers: 4
+  pin_memory: true 
