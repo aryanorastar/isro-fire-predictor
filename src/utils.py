@@ -269,19 +269,13 @@ def validate_input_data(data: Dict) -> bool:
     return True
 
 
-def setup_logging(config: Dict) -> None:
-    """Setup logging configuration."""
-    log_config = config.get("logging", {})
-    
-    # Create logs directory if it doesn't exist
-    log_file = log_config.get("file", "logs/forestfire.log")
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-    
+def setup_logging(config: Dict = None) -> None:
+    """Setup logging configuration - Streamlit Cloud compatible."""
+    # Use only StreamHandler for logging (works on Streamlit Cloud)
     logging.basicConfig(
-        level=getattr(logging, log_config.get("level", "INFO")),
-        format=log_config.get("format", "%(asctime)s - %(name)s - %(levelname)s - %(message)s"),
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler(log_file),
             logging.StreamHandler()
         ]
     ) 
