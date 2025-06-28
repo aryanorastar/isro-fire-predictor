@@ -30,7 +30,12 @@ class DataPreprocessor:
     
     def __init__(self, config_path: str = "config.yaml"):
         self.config = load_config(config_path)
-        setup_logging(self.config)
+        try:
+            setup_logging(self.config)
+        except (FileNotFoundError, PermissionError, OSError):
+            # Fallback: basic logging for Streamlit Cloud
+            import logging
+            logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
         self.data_dir = self.config["paths"]["data_dir"]
         self.input_size = tuple(self.config["data"]["input_size"])
         
