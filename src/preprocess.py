@@ -32,10 +32,11 @@ class DataPreprocessor:
         self.config = load_config(config_path)
         try:
             setup_logging(self.config)
-        except (FileNotFoundError, PermissionError, OSError):
+        except Exception as e:
             # Fallback: basic logging for Streamlit Cloud
             import logging
-            logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+            logging.basicConfig(level=logging.INFO)
+            print(f"Logging setup failed: {e}, using basic logging")
         self.data_dir = self.config["paths"]["data_dir"]
         self.input_size = tuple(self.config["data"]["input_size"])
         
