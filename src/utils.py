@@ -26,7 +26,14 @@ logger = logging.getLogger(__name__)
 
 def load_config(config_path: str = "config.yaml") -> Dict:
     """Load configuration from YAML file."""
-    with open(config_path, 'r') as file:
+    # Get the directory containing this script (src/)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # Go up one level to project root
+    project_root = os.path.dirname(current_dir)
+    # Construct the full path to config.yaml
+    full_config_path = os.path.join(project_root, config_path)
+    
+    with open(full_config_path, 'r') as file:
         config = yaml.safe_load(file)
     return config
 
