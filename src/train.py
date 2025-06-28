@@ -11,7 +11,7 @@ import numpy as np
 import yaml
 from tqdm import tqdm
 import logging
-from .utils import load_config, calculate_iou, calculate_f1_score, setup_device
+from src.utils import load_config, calculate_iou, calculate_f1_score, setup_device
 
 # --- Model Definitions ---
 class SimpleTransformerBlock(nn.Module):

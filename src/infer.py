@@ -5,9 +5,9 @@ Inference script for Forest Fire Spread Prediction
 import os
 import torch
 import numpy as np
-from .utils import load_config, setup_device, format_prediction_results
-from .preprocess import DataPreprocessor
-from .train import TransformerCAHybrid
+from src.utils import load_config, setup_device, format_prediction_results
+from src.preprocess import DataPreprocessor
+from src.train import TransformerCAHybrid
 
 class FirePredictor:
     def __init__(self, model_path=None, config_path="config.yaml"):

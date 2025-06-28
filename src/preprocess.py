@@ -17,7 +17,7 @@ import logging
 from tqdm import tqdm
 import json
 
-from .utils import (
+from src.utils import (
     load_config, normalize_data, calculate_ndvi, calculate_slope,
     resize_raster, get_weather_data, setup_logging
 )
