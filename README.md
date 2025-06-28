@@ -24,8 +24,8 @@ An AI/ML-powered system that simulates and predicts forest fire spread using sat
 
 1. **Clone the repository**
 ```bash
-git clone <your-repo-url>
-cd forestfire-ai
+git clone https://github.com/aryanorastar/isro-fire-predictor.git
+cd isro-fire-predictor
 ```
 
 2. **Install dependencies**
@@ -41,14 +41,13 @@ cp .env.example .env
 
 4. **Run the dashboard**
 ```bash
-cd frontend
-streamlit run app.py
+streamlit run frontend/app.py
 ```
 
 ## 📁 Project Structure
 
 ```
-forestfire-ai/
+isro-fire-predictor/
 ├── data/                      # Sample satellite & weather data
 ├── models/                   # Trained model weights
 ├── src/
@@ -168,4 +167,4 @@ For questions or support, please open an issue on GitHub.
 
 ---
 
-**Built with ❤️ for Bharatiya Antariksh Hackathon 2025** 
+**Built with ❤️ for Bharatiya Antariksh Hackathon 2025**
