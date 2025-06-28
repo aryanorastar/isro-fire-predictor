@@ -12,6 +12,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 from src.infer import FirePredictor
 from src.utils import load_config
+from scipy.ndimage import zoom
 
 # Custom CSS for dark fire theme, glassmorphism, and advanced animations
 st.markdown("""
@@ -538,8 +539,11 @@ if predict_button:
             # Create realistic terrain with elevation
             Z = 50 * np.sin(X/20) * np.cos(Y/20) + 30 * np.exp(-((X-50)**2 + (Y-50)**2)/1000)
             
+            # Resize prediction data to match terrain dimensions (50x50)
+            pred_resized = zoom(pred, (50/pred.shape[0], 50/pred.shape[1]), order=1)
+            
             # Add fire overlay
-            fire_overlay = pred * 100  # Scale fire intensity
+            fire_overlay = pred_resized * 100  # Scale fire intensity
             
             # Create 3D surface plot
             fig_3d = go.Figure()
