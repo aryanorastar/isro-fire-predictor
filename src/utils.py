@@ -279,53 +279,16 @@ def validate_input_data(data: Dict) -> bool:
 
 def setup_logging(config=None):
     """Setup logging configuration - Streamlit Cloud compatible."""
+    import logging
+    import sys
     
-    # Determine log level
-    log_level = logging.INFO
-    if config and isinstance(config, dict) and 'logging' in config:
-        level_str = config['logging'].get('level', 'INFO').upper()
-        log_level = getattr(logging, level_str, logging.INFO)
-    
-    # Clear any existing handlers
-    root_logger = logging.getLogger()
-    for handler in root_logger.handlers[:]:
-        root_logger.removeHandler(handler)
-    
-    # Create formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    # Simple console-only logging - guaranteed to work everywhere
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler(sys.stdout)],
+        force=True
     )
-    
-    # Always use console handler (safe for all environments)
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(log_level)
-    console_handler.setFormatter(formatter)
-    
-    # Configure root logger
-    root_logger.setLevel(log_level)
-    root_logger.addHandler(console_handler)
-    
-    # Only try file logging if not on Streamlit Cloud
-    if not _is_streamlit_cloud():
-        try:
-            # Try to create logs directory
-            log_dir = 'logs'
-            os.makedirs(log_dir, exist_ok=True)
-            
-            # Create file handler
-            log_file = os.path.join(log_dir, 'app.log')
-            file_handler = logging.FileHandler(log_file)
-            file_handler.setLevel(log_level)
-            file_handler.setFormatter(formatter)
-            root_logger.addHandler(file_handler)
-            
-            logging.info(f"Logging to file: {log_file}")
-        except (OSError, PermissionError) as e:
-            logging.warning(f"Could not setup file logging: {e}")
-    else:
-        logging.info("Running on Streamlit Cloud - console logging only")
-    
-    return root_logger
 
 def _is_streamlit_cloud():
     """Detect if running on Streamlit Cloud."""
