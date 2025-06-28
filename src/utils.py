@@ -280,62 +280,57 @@ def validate_input_data(data: Dict) -> bool:
 def setup_logging(config=None):
     """Setup logging configuration - Streamlit Cloud compatible."""
     
-    # Create logs directory only if we have write permissions
-    log_dir = None
-    try:
-        # Try to create logs directory in current working directory
-        log_dir = os.path.join(os.getcwd(), 'logs')
-        os.makedirs(log_dir, exist_ok=True)
-        # Test if we can write to it
-        test_file = os.path.join(log_dir, 'test_write.tmp')
-        with open(test_file, 'w') as f:
-            f.write('test')
-        os.remove(test_file)
-    except (OSError, PermissionError):
-        # If we can't create/write to logs directory, use console only
-        log_dir = None
-    
-    # Configure logging
+    # Determine log level
     log_level = logging.INFO
-    if config and 'logging' in config and 'level' in config['logging']:
-        log_level = getattr(logging, config['logging']['level'].upper(), logging.INFO)
+    if config and isinstance(config, dict) and 'logging' in config:
+        level_str = config['logging'].get('level', 'INFO').upper()
+        log_level = getattr(logging, level_str, logging.INFO)
+    
+    # Clear any existing handlers
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
     
     # Create formatter
     formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     
-    # Get root logger
-    logger = logging.getLogger()
-    logger.setLevel(log_level)
-    
-    # Clear existing handlers
-    for handler in logger.handlers[:]:
-        logger.removeHandler(handler)
-    
-    # Always add console handler (works on Streamlit Cloud)
+    # Always use console handler (safe for all environments)
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(log_level)
     console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
     
-    # Add file handler only if we can write files
-    if log_dir:
+    # Configure root logger
+    root_logger.setLevel(log_level)
+    root_logger.addHandler(console_handler)
+    
+    # Only try file logging if not on Streamlit Cloud
+    if not _is_streamlit_cloud():
         try:
-            log_filename = f"app_{datetime.now().strftime('%Y%m%d')}.log"
-            log_filepath = os.path.join(log_dir, log_filename)
+            # Try to create logs directory
+            log_dir = 'logs'
+            os.makedirs(log_dir, exist_ok=True)
             
-            file_handler = logging.FileHandler(log_filepath)
+            # Create file handler
+            log_file = os.path.join(log_dir, 'app.log')
+            file_handler = logging.FileHandler(log_file)
             file_handler.setLevel(log_level)
             file_handler.setFormatter(formatter)
-            logger.addHandler(file_handler)
+            root_logger.addHandler(file_handler)
             
-            logger.info(f"Logging to file: {log_filepath}")
-        except Exception as e:
-            # If file logging fails, just use console
-            logger.warning(f"Could not setup file logging: {e}")
+            logging.info(f"Logging to file: {log_file}")
+        except (OSError, PermissionError) as e:
+            logging.warning(f"Could not setup file logging: {e}")
     else:
-        logger.info("File logging disabled - using console only (Streamlit Cloud compatible)")
+        logging.info("Running on Streamlit Cloud - console logging only")
     
-    return logger 
+    return root_logger
+
+def _is_streamlit_cloud():
+    """Detect if running on Streamlit Cloud."""
+    return (
+        '/mount/src/' in os.getcwd() or 
+        os.environ.get('STREAMLIT_CLOUD') is not None or
+        os.environ.get('STREAMLIT_SHARING') is not None
+    ) 
